@@ -1,0 +1,82 @@
+*****************************************************
+***     SORABH HAMIRWASIA
+***     Project 3 CS 505
+***
+*****************************************************
+
+Files:
+=====
+1) server.cpp
+2) server.h
+3) client.cpp
+4) client.h
+5) message.h
+6) Makefile
+7) hostfile.txt  -- For servers
+8) hostfile1.txt -- For client 1
+9) hostfile2.txt -- For client 2
+10) command-file1.txt -- For client 1
+11) command-file2.txt -- For client 2
+12) CS505_Project3.pdf  -- Report for the project.
+
+Steps to generate the executable of the program and run it:-
+====================================================
+1) Go to the directory containing all the above mentioned files and run the
+command "make". It will create two executables "server" and "client".
+
+2) All the hostfiles conatins the VM's hostname (e.g. ubuntu-clone61).
+ I am using the hostfile for clients to fill the serverid in the update message.
+
+3) Execute the executable generated in step 1 using the command below:
+
+Command:
+========
+./server -p <paxosPortNumber> -s <serverPortNumber> -h <hostfile>
+./client -s <ServerPort> -c <commandFile> -i <client id> -h <hostfile>
+
+4) To clean the executable. Run the command:
+make clean;
+
+Notes:
+======
+Updated structure for Proposal Message:
+----------------------------------------
+typedef struct {
+    uint32_t type; // must be equal to 5
+    uint32_t server_id;
+    uint32_t view;
+    uint32_t seq;
+    Client_Update update;
+}Proposal;
+
+
+Updated structure for Globally Ordered Update Message:
+----------------------------------------
+typedef struct {
+    uint32_t type; // must be equal to 7
+    uint32_t server_id;
+    uint32_t seq;
+    Client_Update update;
+}Globally_Ordered_Update;
+
+
+Updated structure for Prepare Ok Message:
+----------------------------------------
+typedef struct {
+    uint32_t type; // must be equal to 8
+    uint32_t server_id;
+    uint32_t view;
+    // The following fields form the data_list
+    // structure mentioned in the paper
+    //
+    // a list of proposals
+    uint32_t total_proposals; // total number of proposals in this message
+    uint32_t total_globally_ordered_updates; // total number of globally ordered updates
+    Proposal* proposals;
+    //
+    // a list of globally ordered updates
+    // in this message
+    Globally_Ordered_Update* globally_ordered_updates;
+}Prepare_OK;
+
+
